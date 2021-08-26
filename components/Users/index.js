@@ -1,19 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Card, Container, OutlinedInput, Stack, Typography } from "@material-ui/core";
+import React, {  useState } from 'react';
+import { Button, Card, Container, CssBaseline, OutlinedInput, Stack, Typography } from "@material-ui/core";
 import { Icon } from '@iconify/react';
 import plusFill from '@iconify/icons-eva/plus-fill';
 import UserGrid from "../UserGrid";
 import UserToolbar from "../UserGrid/user-toolbar";
 import CreateUserDialog from "../Auth/CreateUserDialog";
-
+import { makeStyles } from "@material-ui/styles";
+import styles from './Users.module.css';
+import CreateProjectDialog from "../Auth/CreateProjectDialog";
+import CreateDepartmentDialog from "../Auth/CreateDepartmentDialog";
+const useStyles = makeStyles((theme) => ({
+    root:{
+        margin: 15
+    }
+}));
 
 const Users = ({users}) => {
+    const classes = useStyles();
     const [filterName, setFilterName] = useState('');
-    const [open,setOpen] = useState(false);
+    const [createUserOpen,setCreateUserOpen] = useState(false);
+    const [createProjectDialog,setCreateProjectDialog] = useState(false);
+    const [createDepartmentDialog,setCreateDepartmentDialog] = useState(false);
 
     const handleCreateUserDialog = () => {
-        setOpen(true);
+        setCreateUserOpen(true);
     };
+
+    const handleCreateProjectDialog = () => {
+        setCreateProjectDialog(true);
+    };
+
+    const handleCreateDepartmentDialog = () => {
+        setCreateDepartmentDialog(true);
+    };
+
     function handleFilterChange(ev) {
         setFilterName(ev.target.value);
     }
@@ -21,24 +41,51 @@ const Users = ({users}) => {
 
 
     return (
-        <div style={{ marginTop: 100 }}>
-            <Container>
+        <div style={{ marginTop: 200 }}>
+            <Container maxWidth={"xl"}>
                 <Card>
 
-                    <CreateUserDialog open={open} setOpen={setOpen} />
+                    <CreateUserDialog open={createUserOpen} setOpen={setCreateUserOpen} />
+                    <CreateProjectDialog open={createProjectDialog} setOpen={setCreateProjectDialog} />
+                    <CreateDepartmentDialog open={createDepartmentDialog} setOpen={setCreateDepartmentDialog} />
 
                     <Stack direction="row" alignItems="center" justifyContent="space-between" padding={2} mb={5}>
                         <Typography variant="h4" gutterBottom>
                             User
                         </Typography>
-                        <Button
-                            variant="contained"
-                            to="#"
-                            startIcon={<Icon icon={plusFill}/>}
-                            onClick={handleCreateUserDialog}
-                        >
-                            New User
-                        </Button>
+                        <div className={styles.buttonContainer}>
+                                <Button
+                                    className={classes.root}
+                                    variant="contained"
+                                    to="#"
+                                    startIcon={<Icon icon={plusFill}/>}
+                                    onClick={handleCreateDepartmentDialog}
+                                >
+                                New Department
+                            </Button>
+                                <Button
+                                    className={classes.root}
+                                    variant="contained"
+                                    to="#"
+                                    startIcon={<Icon icon={plusFill}/>}
+                                    onClick={handleCreateProjectDialog}
+                                >
+                                New Project
+                            </Button>
+                                <Button
+                                    className={classes.root}
+                                    variant="contained"
+                                    to="#"
+                                    startIcon={<Icon icon={plusFill}/>}
+                                    onClick={handleCreateUserDialog}
+                                >
+                                New User
+                            </Button>
+
+
+
+                        </div>
+
                     </Stack>
 
                     <OutlinedInput

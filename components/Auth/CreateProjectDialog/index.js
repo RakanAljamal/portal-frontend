@@ -11,13 +11,9 @@ import axios from "axios";
 import { IconButton, Snackbar } from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
 
-export default function CreateUserDialog({ open, setOpen }) {
+export default function CreateProjectDialog({ open, setOpen }) {
     const { formData, handleInputChange,resetForm } = useForm({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        retypedPassword: ""
+        name: ""
     })
     const [toastOpen, setToastOpen] = useState(false);
     const [message, setMessage] = useState('');
@@ -36,12 +32,13 @@ export default function CreateUserDialog({ open, setOpen }) {
         setToastOpen(false);
     };
     const handleCreate = () => {
-        axios.post('http://localhost:3000/user/register', { ...formData })
+        console.log({ ...formData })
+        axios.post('http://localhost:3000/project/', { ...formData } )
             .then(response => {
                 return response.data;
             })
             .then(json => {
-                setMessage('User created successfully');
+                setMessage('Project created successfully');
                 setToastOpen(true)
                 setOpen(false);
                 resetForm();
@@ -52,7 +49,7 @@ export default function CreateUserDialog({ open, setOpen }) {
         })
     };
 
-    const { firstName, lastName, email, password, retypedPassword } = formData;
+    const { name } = formData;
 
     return (
         <div>
@@ -74,8 +71,8 @@ export default function CreateUserDialog({ open, setOpen }) {
                 }
             />
 
-            <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
-                <DialogTitle id="form-dialog-title">Add User</DialogTitle>
+            <Dialog fullWidth open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                <DialogTitle id="form-dialog-title">Add Project</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                     </DialogContentText>
@@ -83,45 +80,12 @@ export default function CreateUserDialog({ open, setOpen }) {
                         autoFocus
                         margin="dense"
                         id="name"
-                        label="First name"
-                        name="firstName"
+                        label="name"
+                        name="name"
                         fullWidth
-                        value={firstName}
+                        value={name}
                         onChange={handleInputChange}
                     />
-                    <TextField
-                        margin="dense"
-                        name="lastName"
-                        label="Last name"
-                        type="email"
-                        fullWidth
-                        value={lastName}
-                        onChange={handleInputChange}/>
-                    <TextField
-                        margin="dense"
-                        label="Email"
-                        type="email"
-                        name="email"
-                        fullWidth
-                        value={email}
-                        onChange={handleInputChange}/>
-                    <TextField
-                        margin="dense"
-                        label="Password"
-                        type="password"
-                        name="password"
-                        fullWidth
-                        value={password}
-                        onChange={handleInputChange}/>
-                    <TextField
-                        margin="dense"
-                        label="Retype password"
-                        type="password"
-                        name="retypedPassword"
-                        fullWidth
-                        value={retypedPassword}
-                        onChange={handleInputChange}/>
-
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose} color="primary">

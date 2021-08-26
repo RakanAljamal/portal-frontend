@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import {
     Paper,
     Table,
@@ -16,9 +16,10 @@ import CreateUserDialog from "../Auth/CreateUserDialog";
 
 const useStyles = makeStyles({
     table: {
-        minWidth: 1200,
+        minWidth: 600,
     }
 });
+
 
 
 const UserGrid = ({ filterName, users }) => {
@@ -46,30 +47,29 @@ const UserGrid = ({ filterName, users }) => {
         setLoading(true)
     }, [])
     return (
-        loading && <>
-
-            <CreateUserDialog open={open}/>
-            <Table className={classes.table} component={Paper}>
-            <TableHead>
-                <TableRow>
-                    <TableCell align="center">ID</TableCell>
-                    <TableCell align="center">Avatar</TableCell>
-                    <TableCell align="center">Name</TableCell>
-                    <TableCell align="center">Email</TableCell>
-                    <TableCell align="center">Department</TableCell>
-                    <TableCell align="center">Projects</TableCell>
-                    <TableCell align="center">Role</TableCell>
-                    <TableCell align="center"/>
-                </TableRow>
-            </TableHead>
-            <TableUserBody filterName={filterName} page={page} rowsPerPage={rowsPerPage} users={users}/>
-        </Table>
-            <TableUserFooter TablePaginationActions={UserTablePagination}
-                             users={users} page={page}
-                             handleChangeRowsPerPage={handleChangeRowsPerPage}
-                             handleChangePage={handleChangePage}
-                             rowsPerPage={rowsPerPage}/>
-        </>
+        loading && <div style={{minWidth:600}}>
+                <CreateUserDialog open={open}/>
+                <Table className={classes.table} component={Paper}>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">ID</TableCell>
+                            <TableCell align="center">Avatar</TableCell>
+                            <TableCell align="center">Name</TableCell>
+                            <TableCell align="center">Email</TableCell>
+                            <TableCell align="center">Department</TableCell>
+                            <TableCell align="center">Projects</TableCell>
+                            <TableCell align="center">Role</TableCell>
+                            <TableCell align="center"/>
+                        </TableRow>
+                    </TableHead>
+                    <TableUserBody filterName={filterName} page={page} rowsPerPage={rowsPerPage} users={users}/>
+                </Table>
+                <TableUserFooter TablePaginationActions={UserTablePagination}
+                                 users={users} page={page}
+                                 handleChangeRowsPerPage={handleChangeRowsPerPage}
+                                 handleChangePage={handleChangePage}
+                                 rowsPerPage={rowsPerPage}/>
+        </div>
     );
 };
 

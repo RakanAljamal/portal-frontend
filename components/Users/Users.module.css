@@ -1,3 +1,13 @@
 .usersContainer {
     margin: 100px 0px;
 }
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    width: 520px;
+}
+
+.buttonContainer .MuiButton-root {
+    margin: 0 40px !important;
+}

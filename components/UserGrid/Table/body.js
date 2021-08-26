@@ -6,7 +6,14 @@ import { ShowEditedUserGrid, ShowUserGrid } from "./actions";
 const useStyles = makeStyles({
     avatar: {
         margin: "auto"
-    }
+    },
+    chips: {
+        display: 'flex',
+        flexWrap: 'wrap',
+    },
+    chip: {
+        margin: 2,
+    },
 });
 
 
