@@ -85,7 +85,7 @@ const Profile = ({ hello }) => {
                                             <TableCell align="right">Role</TableCell>
                                             <TableCell align="right">Department</TableCell>
                                             <TableCell align="center">Projects</TableCell>
-                                            <TableCell width={"10%"} align="right">Created At</TableCell>
+                                            <TableCell width={"15%"} align="center">Created At</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -99,7 +99,7 @@ const Profile = ({ hello }) => {
                                                 <Chip key={i} label={project.name} className={classes.chip}/>
                                             ))}
                                         </TableCell>
-                                        <TableCell width={"10%"} align="right">{user.createdAt.substring(0, 10)}</TableCell>
+                                        <TableCell width={"15%"} align="center">{user.createdAt.substring(0, 10)}</TableCell>
                                     </TableBody>
                                 </Table>
                             </TableContainer>
