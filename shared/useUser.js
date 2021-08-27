@@ -16,7 +16,6 @@ export const useUser = () => {
         }).then(response => {
                 setUser(response.data)
                 setLoading(false);
-                router.push('/')
         }).catch(err=>{
             setLoading(false);
             router.push('/login')

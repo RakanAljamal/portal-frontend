@@ -9,6 +9,7 @@ import { makeStyles } from "@material-ui/styles";
 import axios from "axios";
 import { UserContext } from "../../UserProvider";
 import { useSecretApi } from "../../../shared/useApi";
+import ChangePasswordDialog from "../../Auth/ChangePasswordDialog";
 
 export const roles = {
     ADMIN: "Admin",
@@ -53,16 +54,27 @@ const fetchProjects = async () => {
     return results.data;
 };
 
-export function ShowEditedUserGrid({ handleRowEdit, classes, id, firstName, role, lastName, email, department, projects }) {
+export function ShowEditedUserGrid({
+                                       handleRowEdit,
+                                       classes,
+                                       id,
+                                       firstName,
+                                       role,
+                                       lastName,
+                                       email,
+                                       department,
+                                       projects
+                                   }) {
     const [fName, setFName] = useState(firstName)
     const [lName, setLName] = useState(lastName)
     const [Email, setEmail] = useState(email)
     const [Department, setDepartment] = useState(department?.id)
-    const [Projects, setProjects] = useState(projects ? projects?.map(({ id })=>`${id}`) : [])
+    const [Projects, setProjects] = useState(projects ? projects?.map(({ id }) => `${id}`) : [])
     const [Role, setRole] = useState(role)
     const [availableDepartments, setAvailableDepartments] = useState(null)
     const [availableProjects, setAvailableProjects] = useState(null)
     const { toggleRefresh } = useContext(UserContext);
+
     function handleChange(ev, func) {
         return func(ev.target.value);
     }
@@ -137,7 +149,8 @@ export function ShowEditedUserGrid({ handleRowEdit, classes, id, firstName, role
                           values={availableDepartments} defaultValue={Department}/>
         </TableCell>
         <TableCell width={"20%"} size="small" align="center" component="th" scope="row">
-            <MultipleSelect handleItemsChange={handleProjectsChange} projectName={'Select a project'} values={availableProjects} projects={projects}/>
+            <MultipleSelect handleItemsChange={handleProjectsChange} projectName={'Select a project'}
+                            values={availableProjects} projects={projects}/>
         </TableCell>
         <TableCell width={"5%"} size="small" align="center" component="th" scope="row">
             <DropdownMenu placeholder={'Select role'} handleItemChange={handleRoleChange} values={rolesData}
@@ -193,30 +206,39 @@ export function ShowUserGrid({ classes, handleRowEdit, id, firstName, role, last
             {role}
         </TableCell>
         <TableCell width={"20%"} align="center" component="th" scope="row">
-            <UserOptions handleRowEdit={handleRowEdit} id={id}/>
+            <UserOptions options={['Edit','Delete','ChangePassword']} handleRowEdit={handleRowEdit} id={id} admin={true}/>
         </TableCell>
     </TableRow>
 }
 
-export const UserOptions = ({ id, handleRowEdit }) => {
-    const {toggleRefresh} = useContext(UserContext);
+export const UserOptions = ({ id, handleRowEdit, options = [],admin = false }) => {
+    const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
+    const { toggleRefresh } = useContext(UserContext);
+
     function handleEdit(popupState) {
         handleRowEdit(id)
         return popupState.close();
     }
 
     function handleDelete(popupState) {
-        useSecretApi(`http://localhost:3000/user/delete/${id}`).delete().then(data=>{
+        useSecretApi(`http://localhost:3000/user/delete/${id}`).delete().then(data => {
             console.log(data)
             toggleRefresh()
-        }).catch(err=>{
+        }).catch(err => {
             console.log(err)
         })
         return popupState.close();
     }
 
+    function handleChangePassword(popupState) {
+        setOpenPasswordDialog(true);
+        return popupState.close();
+    }
 
-    return <PopupState variant="popover" popupId="demo-popup-menu">
+
+    return <>
+        <ChangePasswordDialog id={id} admin={admin} open={openPasswordDialog} setOpen={setOpenPasswordDialog} />
+        <PopupState variant="popover" popupId="demo-popup-menu">
         {(popupState) => (
             <React.Fragment>
                 <IconButton
@@ -228,11 +250,14 @@ export const UserOptions = ({ id, handleRowEdit }) => {
                     <MoreVertIcon/>
                 </IconButton>.
                 <Menu {...bindMenu(popupState)}>
-                    <MenuItem onClick={() => handleEdit(popupState)}>Edit</MenuItem>
-                    <MenuItem onClick={() => handleDelete(popupState)}>Delete</MenuItem>
+                    {options.includes('Edit') && <MenuItem onClick={() => handleEdit(popupState)}>Edit</MenuItem>}
+                    {options.includes('Delete') && <MenuItem onClick={() => handleDelete(popupState)}>Delete</MenuItem>}
+                    {options.includes('ChangePassword') &&
+                    <MenuItem onClick={() => handleChangePassword(popupState)}>Change Password</MenuItem>}
                 </Menu>
             </React.Fragment>
         )}
     </PopupState>
+    </>
 }
 

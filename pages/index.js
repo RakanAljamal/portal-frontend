@@ -60,7 +60,7 @@ export  function PermanentDrawerLeft({children}) {
             <CssBaseline/>
             <AppBar position="fixed" className={classes.appBar}>
                 <Toolbar>
-                    <h4 style={{marginLeft:drawerWidth}}>Users Portal</h4>
+                    <h4>Users Portal</h4>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -106,15 +106,17 @@ export default function Home() {
         setRefreshUsers(true);
     }
     useEffect(()=>{
+        if(user){
             useSecretApi('http://localhost:3000/user/').get().then(response => {
                 setUsers(response.data)
                 setIsLoading(false);
                 setRefreshUsers(false)
             }).catch(err=>{
                 router.push('/notfound')
-               throw new Error('Unauthorized user');
+                throw new Error('Unauthorized user');
             })
-    },[refreshUsers])
+        }
+    },[user,refreshUsers])
 
 
     if(loading){
@@ -122,7 +124,6 @@ export default function Home() {
     }
 
     return (
-        <ThemeProvider theme={theme}>
         <div className={styles.container}>
             <PermanentDrawerLeft >
                 <UserProvider value={{ refreshUsers, toggleRefresh }}>
@@ -130,8 +131,6 @@ export default function Home() {
                 </UserProvider>
             </PermanentDrawerLeft>
         </div>
-        </ThemeProvider>
-
     )
 }
 
