@@ -41,7 +41,7 @@ const Users = ({users}) => {
 
 
     return (
-        <div style={{ marginTop: 200 }}>
+        <div>
             <Container maxWidth={"xl"}>
                 <Card>
 

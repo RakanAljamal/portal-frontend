@@ -5,7 +5,7 @@
 .buttonContainer {
     display: flex;
     justify-content: space-between;
-    width: 520px;
+    width: 600px;
 }
 
 .buttonContainer .MuiButton-root {

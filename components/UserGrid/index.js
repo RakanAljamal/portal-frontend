@@ -16,7 +16,7 @@ import CreateUserDialog from "../Auth/CreateUserDialog";
 
 const useStyles = makeStyles({
     table: {
-        minWidth: 600,
+        minWidth: 800,
     }
 });
 
@@ -47,7 +47,7 @@ const UserGrid = ({ filterName, users }) => {
         setLoading(true)
     }, [])
     return (
-        loading && <div style={{minWidth:600}}>
+        loading && <div style={{minWidth:800}}>
                 <CreateUserDialog open={open}/>
                 <Table className={classes.table} component={Paper}>
                     <TableHead>

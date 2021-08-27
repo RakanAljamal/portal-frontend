@@ -8,6 +8,7 @@ import Chip from "@material-ui/core/Chip";
 import { makeStyles } from "@material-ui/styles";
 import axios from "axios";
 import { UserContext } from "../../UserProvider";
+import { useSecretApi } from "../../../shared/useApi";
 
 export const roles = {
     ADMIN: "Admin",
@@ -43,13 +44,12 @@ const projectsData = [{
 }]
 
 const fetchDepartments = async () => {
-    const results = await axios.get('http://localhost:3000/department/')
+    const results = await useSecretApi('http://localhost:3000/department/').get()
 
     return results.data;
 };
 const fetchProjects = async () => {
-    const results = await axios.get('http://localhost:3000/project/')
-
+    const results = await useSecretApi('http://localhost:3000/project/').get()
     return results.data;
 };
 
@@ -81,13 +81,14 @@ export function ShowEditedUserGrid({ handleRowEdit, classes, id, firstName, role
     }, [])
 
     function handleSave() {
-        axios.patch(`http://localhost:3000/user/update/${id}`, {
+        useSecretApi(`http://localhost:3000/user/update/${id}`, {
             firstName: fName,
-            lastName:lName,
+            lastName: lName,
             email: Email,
             departmentId: Department,
-            projectsId: Projects.length > 0 ? Projects : null
-        }).then(data => {
+            projectsId: Projects.length > 0 ? Projects : null,
+            role: Role
+        }).patch().then(data => {
             toggleRefresh();
             handleRowEdit(-1);
         }).catch(err => {
@@ -108,7 +109,6 @@ export function ShowEditedUserGrid({ handleRowEdit, classes, id, firstName, role
     }
 
     function handleProjectsChange(values) {
-        console.log(values)
         setProjects(values);
     }
 
@@ -206,7 +206,7 @@ export const UserOptions = ({ id, handleRowEdit }) => {
     }
 
     function handleDelete(popupState) {
-        axios.delete(`http://localhost:3000/user/delete/${id}`).then(data=>{
+        useSecretApi(`http://localhost:3000/user/delete/${id}`).delete().then(data=>{
             console.log(data)
             toggleRefresh()
         }).catch(err=>{

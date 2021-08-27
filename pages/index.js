@@ -10,12 +10,15 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import { makeStyles, useTheme } from "@material-ui/styles";
-import { CssBaseline, Typography } from "@material-ui/core";
+import { CssBaseline, LinearProgress } from "@material-ui/core";
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ExitToApp } from "@material-ui/icons";
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import { UserProvider } from "../components/UserProvider";
+import { useUser } from "../shared/useUser";
+import { useRouter } from "next/router";
+import { useSecretApi } from "../shared/useApi";
 
 const drawerWidth = 240;
 
@@ -45,6 +48,12 @@ const useStyles = makeStyles((theme) => ({
 export  function PermanentDrawerLeft({children}) {
     const classes = useStyles();
     const theme = useTheme();
+    const router = useRouter();
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        router.push('/login');
+    }
 
     return (
         <div className={classes.root}>
@@ -66,7 +75,7 @@ export  function PermanentDrawerLeft({children}) {
                 <Divider/>
                 <List>
                     {['Dashboard', 'Logout'].map((text, index) => (
-                        <ListItem button key={text}>
+                        <ListItem onClick={index % 2 !== 0 ? handleLogout : null} button key={text}>
                             <ListItemIcon>{index % 2 === 0 ? <DashboardIcon/> : <ExitToApp />}</ListItemIcon>
                             <ListItemText primary={text}/>
                         </ListItem>
@@ -87,24 +96,33 @@ const theme = createTheme();
 
 
 export default function Home() {
-    const[loading,setIsLoading] = useState(false);
+    const router = useRouter();
+    const[loading,setIsLoading] = useState(true);
     const[users,setUsers] = useState(null);
-
+    const { user } = useUser();
     const [refreshUsers,setRefreshUsers] = useState(false);
 
     function toggleRefresh () {
         setRefreshUsers(true);
     }
     useEffect(()=>{
-        axios.get('http://localhost:3000/user/').then(response => {
-            setUsers(response.data)
-            setIsLoading(true);
-            setRefreshUsers(false)
-        })
-
+            useSecretApi('http://localhost:3000/user/').get().then(response => {
+                setUsers(response.data)
+                setIsLoading(false);
+                setRefreshUsers(false)
+            }).catch(err=>{
+                router.push('/notfound')
+               throw new Error('Unauthorized user');
+            })
     },[refreshUsers])
+
+
+    if(loading){
+        return  <LinearProgress />
+    }
+
     return (
-       loading && <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
         <div className={styles.container}>
             <PermanentDrawerLeft >
                 <UserProvider value={{ refreshUsers, toggleRefresh }}>

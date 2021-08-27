@@ -10,6 +10,7 @@ import { useForm } from "../../../shared/useForm";
 import axios from "axios";
 import { IconButton, Snackbar } from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
+import { useSecretApi } from "../../../shared/useApi";
 
 export default function CreateProjectDialog({ open, setOpen }) {
     const { formData, handleInputChange,resetForm } = useForm({
@@ -32,8 +33,8 @@ export default function CreateProjectDialog({ open, setOpen }) {
         setToastOpen(false);
     };
     const handleCreate = () => {
-        console.log({ ...formData })
-        axios.post('http://localhost:3000/project/', { ...formData } )
+        useSecretApi('http://localhost:3000/project/', { ...formData } )
+            .post()
             .then(response => {
                 return response.data;
             })
