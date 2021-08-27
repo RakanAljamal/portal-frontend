@@ -3,7 +3,7 @@
 ---
 ![login](screenshots/login.png)
 ![home](screenshots/home-portal.png)
-![profile](screenshots/profile.png)
+![profile](screenshots/Profile.png)
 ![users-actions](screenshots/users-actions.png)
 ![save-user](screenshots/save-user.png)
 ![department](screenshots/save-department.png)
