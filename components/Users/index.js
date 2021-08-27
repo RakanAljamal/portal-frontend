@@ -89,8 +89,11 @@ const Users = ({users}) => {
                     </Stack>
 
                     <OutlinedInput
+                        autoComplete={false}
                         fullWidth
                         value={filterName}
+                        name="filterName"
+                        type="email"
                         onChange={handleFilterChange}
                         placeholder={'Search users...'}/>
                     <UserToolbar />

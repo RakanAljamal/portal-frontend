@@ -21,6 +21,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { UserOptions } from "../../components/UserGrid/Table/actions";
 import { PermanentDrawerLeft } from "../index";
+import Chip from "@material-ui/core/Chip";
 const useStyles = makeStyles(theme => ({
     center: {
         position: 'absolute',
@@ -29,10 +30,14 @@ const useStyles = makeStyles(theme => ({
         transform: 'translate(-50%,-50%)'
     },
     root: {
-        width: "700px"
+        width: "950px"
     },
     table: {
-        minWidth: 650,
+        minWidth: 850,
+    },
+    chips: {
+        display: 'flex',
+        flexWrap: 'wrap',
     },
 }));
 
@@ -78,7 +83,9 @@ const Profile = ({ hello }) => {
                                             <TableCell align="right">First Name</TableCell>
                                             <TableCell align="right">Last Name</TableCell>
                                             <TableCell align="right">Role</TableCell>
-                                            <TableCell align="right">Created At</TableCell>
+                                            <TableCell align="right">Department</TableCell>
+                                            <TableCell align="center">Projects</TableCell>
+                                            <TableCell width={"10%"} align="right">Created At</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -86,7 +93,13 @@ const Profile = ({ hello }) => {
                                         <TableCell align="right">{user.firstName}</TableCell>
                                         <TableCell align="right">{user.lastName}</TableCell>
                                         <TableCell align="right">{user.role}</TableCell>
-                                        <TableCell align="right">{user.createdAt.substring(0, 10)}</TableCell>
+                                        <TableCell align="right">{user.department?.name}</TableCell>
+                                        <TableCell align="center">
+                                            {user.projects?.map((project, i) => (
+                                                <Chip key={i} label={project.name} className={classes.chip}/>
+                                            ))}
+                                        </TableCell>
+                                        <TableCell width={"10%"} align="right">{user.createdAt.substring(0, 10)}</TableCell>
                                     </TableBody>
                                 </Table>
                             </TableContainer>

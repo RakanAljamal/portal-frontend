@@ -109,6 +109,7 @@ export default function ChangePasswordDialog({ open, setOpen,admin,id }) {
                         name="password"
                         type="password"
                         fullWidth
+                        autoComplete={false}
                         value={name}
                         onChange={handleInputChange}
                     />

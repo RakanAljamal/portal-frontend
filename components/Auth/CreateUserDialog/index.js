@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -11,8 +11,10 @@ import axios from "axios";
 import { IconButton, Snackbar } from "@material-ui/core";
 import CloseIcon from '@material-ui/icons/Close';
 import { useSecretApi } from "../../../shared/useApi";
+import { UserContext } from "../../UserProvider";
 
 export default function CreateUserDialog({ open, setOpen }) {
+    const {toggleRefresh} = useContext(UserContext);
     const { formData, handleInputChange,resetForm } = useForm({
         firstName: "",
         lastName: "",
@@ -46,6 +48,7 @@ export default function CreateUserDialog({ open, setOpen }) {
                 setMessage('User created successfully');
                 setToastOpen(true)
                 setOpen(false);
+                toggleRefresh();
                 resetForm();
             }).catch(err => {
             setMessage('Internal server error');
